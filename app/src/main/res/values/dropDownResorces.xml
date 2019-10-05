@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="actions_array">
+        <item>Gift</item>
+        <item>Car</item>
+        <item>Pay</item>
+        <item>Pet</item>
+        <item>Sell</item>
+        <item>Explain</item>
+        <item>That</item>
+        <item>Book</item>
+        <item>Now</item>
+        <item>Work</item>
+        <item>Total</item>
+        <item>Trip</item>
+        <item>Future</item>
+        <item>Good</item>
+        <item>Thank you</item>
+        <item>Learn</item>
+        <item>Agent</item>
+        <item>Should</item>
+        <item>Like</item>
+        <item>Movie</item>
+    </string-array>
+    <string-array name="actions_url">
+        <item>https://www.signingsavvy.com/media/mp4-ld/23/23781.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/26/26165.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/14/14618.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/7/7515.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/9/9199.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/22/22623.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/14/14366.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/14/14326.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/7/7774.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/14/14523.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/26/26467.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/9/9117.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/14/14736.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/21/21534.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/21/21533.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/21/21560.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/22/22125.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/9/9563.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/6/6394.mp4</item>
+        <item>https://www.signingsavvy.com/media/mp4-ld/8/8626.mp4</item>
+    </string-array>
+</resources>
