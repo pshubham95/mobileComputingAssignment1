@@ -30,15 +30,15 @@ public class Main3Activity extends AppCompatActivity {
         bRecord = (Button) findViewById(R.id.rbutton);
         bPlay = (Button) findViewById(R.id.pbutton);
         bUpload = (Button) findViewById(R.id.ubutton);
-        video = (VideoView) findViewById(R.id.videoView);
+        video = (VideoView) findViewById(R.id.rvideoView);
 
         bRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent recordVideo = new Intent();
                 recordVideo.setAction(MediaStore.ACTION_VIDEO_CAPTURE);
-                //recordVideo.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-                //recordVideo.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);
+                recordVideo.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+                recordVideo.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);
                 //recordVideo.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 
                 startActivityForResult(recordVideo, START_CAMERA);
@@ -57,8 +57,8 @@ public class Main3Activity extends AppCompatActivity {
     protected void uriResult(int request, int result, Intent data){
         if( request == START_CAMERA && result == RESULT_OK){
             Uri vUri = data.getData();
-            data.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
-            data.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);
+            //data.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1);
+            //data.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 5);
             video.setVideoURI(vUri);
         }
     }
