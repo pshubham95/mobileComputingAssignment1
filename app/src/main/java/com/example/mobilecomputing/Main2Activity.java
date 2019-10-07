@@ -1,5 +1,6 @@
 package com.example.mobilecomputing;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.os.Environment;
 import android.view.View;
+import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -141,6 +143,24 @@ public class Main2Activity extends AppCompatActivity {
         } else {
             startDownload();
         }
+    }
+
+    public void practice(View view) {
+        Button pbutt = (Button) findViewById(R.id.pbutton);
+        pbutt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent prac = new  Intent(Main2Activity.this, Main3Activity.class);
+                startActivity(prac);
+            }
+        });
+    }
+
+    public void navigatePratice(View view)
+    {
+        Intent intent = new Intent(Main2Activity.this, Main3Activity.class);
+        intent.putExtra("gestureName", gestureName);
+        startActivity(intent);
     }
 
     @Override
