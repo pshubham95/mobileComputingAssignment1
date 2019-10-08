@@ -1,5 +1,6 @@
 package com.example.mobilecomputing;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import java.io.File;
@@ -52,11 +54,17 @@ public class Main2Activity extends AppCompatActivity {
             //set the path where we want to save the file
             //in this case, going to save it on the root directory of the
             //sd card.
+            File folder = new File(Environment.getExternalStorageDirectory() +
+                    File.separator + "/MobileComputing/Videos/");
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
             File SDCardRoot = Environment.getExternalStorageDirectory();
             //create a new file, specifying the path, and the filename
             //which we want to save the file as.
-            File file = new File(SDCardRoot, gestureName+".mp4");
-            System.out.println(SDCardRoot+"/"+gestureName+".mp4");
+            File file = new File(SDCardRoot, "/MobileComputing/Videos/"+gestureName+".mp4");
+            System.out.println(SDCardRoot+"/MobileComputing/Videos/"+gestureName+".mp4");
 
             //this will be used to write the downloaded data into the file we created
             FileOutputStream fileOutput = new FileOutputStream(file);
@@ -86,7 +94,7 @@ public class Main2Activity extends AppCompatActivity {
             }
             //close the output stream when done
             fileOutput.close();
-            return SDCardRoot+"/"+gestureName+".mp4";
+            return SDCardRoot+"/MobileComputing/Videos/"+gestureName+".mp4";
 //catch some possible errors...
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -97,13 +105,25 @@ public class Main2Activity extends AppCompatActivity {
     }
 
     public void playAgain(View view) {
-        VideoView videoView = findViewById(R.id.videoView5);
-        System.out.println("videopath:"+videoPath);
-        videoView.setVideoPath(videoPath);
-        videoView.start();
+        if (videoPath == "error") {
+            startDownload();
+        } else {
+            VideoView videoView = findViewById(R.id.videoView5);
+            System.out.println("videopath:"+videoPath);
+            videoView.setVideoPath(videoPath);
+            videoView.start();
+        }
+
     }
 
     public void startDownload() {
+        final ProgressDialog dialog = new ProgressDialog(Main2Activity.this); // this = YourActivity
+        System.out.println("set dialog");
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setTitle("Loading..");
+        dialog.setIndeterminate(true);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.show();
         Thread thread = new Thread(new Runnable() {
 
             @Override
@@ -113,6 +133,11 @@ public class Main2Activity extends AppCompatActivity {
                     Main2Activity.this.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            dialog.dismiss();
+                            if (videoPath == "error") {
+                                Toast.makeText(Main2Activity.this, "Video did not download, please try again", Toast.LENGTH_LONG).show();
+                                return;
+                            }
                             VideoView videoView = findViewById(R.id.videoView5);
                             System.out.println("videopath:"+videoPath);
                             videoView.setVideoPath(videoPath);
@@ -143,17 +168,6 @@ public class Main2Activity extends AppCompatActivity {
         } else {
             startDownload();
         }
-    }
-
-    public void practice(View view) {
-        Button pbutt = (Button) findViewById(R.id.pbutton);
-        pbutt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent prac = new  Intent(Main2Activity.this, Main3Activity.class);
-                startActivity(prac);
-            }
-        });
     }
 
     public void navigatePratice(View view)

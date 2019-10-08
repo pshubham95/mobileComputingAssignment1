@@ -1,5 +1,6 @@
 package com.example.mobilecomputing;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -38,7 +39,8 @@ public class Main3Activity extends AppCompatActivity {
     private VideoView video;
     private int START_CAMERA = 0;
     private int praticeNum = 1;
-    String gestureName = "", lastName = "Patil";
+    String gestureName = "", lastName = "", asuId = "", groupNumber = "10";
+    String serverUrl = "http://34.66.8.146/video/upload_video.php";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if(Build.VERSION.SDK_INT>=24){
@@ -94,8 +96,17 @@ public class Main3Activity extends AppCompatActivity {
         bUpload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                final ProgressDialog dialog = new ProgressDialog(Main3Activity.this); // this = YourActivity
+                System.out.println("set dialog");
+                dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                dialog.setTitle("Uploading");
+                dialog.setMessage("Uploading video to server. Please wait...");
+                dialog.setIndeterminate(true);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.show();
                 new Thread(new Runnable() {
                     public void run() {
+
                         try {
                             int bytesRead, bytesAvailable, bufferSize;
                             String lineEnd = "\r\n";
@@ -104,13 +115,19 @@ public class Main3Activity extends AppCompatActivity {
                             byte[] buffer;
                             int maxBufferSize = 20 * 1024 * 1024;
                             File SDCardRoot = Environment.getExternalStorageDirectory();
+
                             int temp = praticeNum - 1;
                             // open a URL connection to the Servlet
                             String fileName = SDCardRoot+"/MobileComputing/PraticeVideos/"+gestureName.toUpperCase()+"_PRATICE_("+temp+")_"+lastName.toUpperCase()+".mp4";
-
-                            FileInputStream fileInputStream = new FileInputStream(SDCardRoot+"/MobileComputing/PraticeVideos/"+gestureName.toUpperCase()+"_PRATICE_("+temp+")_"+lastName.toUpperCase()+".mp4");
-
-                            URL url = new URL("http://192.168.0.10/upload_video.php");
+                            System.out.println("File"+fileName);
+                            File sourceFile = new File(fileName);
+                            if (!sourceFile.isFile()) {
+                                Toast.makeText(Main3Activity.this, "Recording does not exist, please try again", Toast.LENGTH_LONG).show();
+                                System.out.println("file des not ");
+                                return;
+                            }
+                            FileInputStream fileInputStream = new FileInputStream(sourceFile);
+                            URL url = new URL(serverUrl);
                             System.out.println("Uploading1");
 
                             // Open a HTTP  connection to  the URL
@@ -123,23 +140,26 @@ public class Main3Activity extends AppCompatActivity {
                             conn.setRequestProperty("ENCTYPE", "multipart/form-data");
                             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
                             conn.setRequestProperty("uploaded_file", fileName);
+                            conn.setRequestProperty("group_id", groupNumber);
+                            conn.setRequestProperty("id", asuId);
                             System.out.println("bhbhbhb");
                             DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
                             System.out.println("knjnjjn");
                             dos.writeBytes(twoHyphens + boundary + lineEnd);
-                            dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename="+
-                                    fileName + '"' + lineEnd);
+                            dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""+
+                                    fileName + '\"' + lineEnd);
 
                             dos.writeBytes(lineEnd);
 
                             // create a buffer of  maximum size
                             bytesAvailable = fileInputStream.available();
-
+                            System.out.println("bytesAvail"+bytesAvailable);
                             bufferSize = Math.min(bytesAvailable, maxBufferSize);
                             buffer = new byte[bufferSize];
 
                             // read file and write it into form...
                             bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+                            System.out.println("bytesAvail"+bytesRead);
 
                             while (bytesRead > 0) {
 
@@ -161,11 +181,13 @@ public class Main3Activity extends AppCompatActivity {
                             Log.i("uploadFile", "HTTP Response is : "
                                     + serverResponseMessage + ": " + serverResponseCode);
 
+                            System.out.println("serverResponseMessage  - "+serverResponseMessage);
                             if(serverResponseCode == 200){
 
                                 runOnUiThread(new Runnable() {
                                     public void run() {
-
+                                        dialog.dismiss();
+                                        Toast.makeText(Main3Activity.this, "File upload completed successfully!", Toast.LENGTH_LONG).show();
                                         System.out.println("Success");
                                     }
                                 });
@@ -176,7 +198,14 @@ public class Main3Activity extends AppCompatActivity {
                             dos.flush();
                             dos.close();
 
-                        }  catch (Exception e) {
+                        }  catch (final Exception e) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dialog.dismiss();
+                                    Toast.makeText(Main3Activity.this, e.toString(), Toast.LENGTH_LONG).show();
+                                }
+                            });
                             System.out.println("here in exception");
 
 
